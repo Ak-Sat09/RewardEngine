@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,17 +30,23 @@ public class CouponController {
     private final CouponFetchImpl fetchImpl;
 
     @PostMapping
-    public ResponseEntity<CouponResponseDTO> createCopon(@RequestBody CouponCreateDTO dto) {
-        return ResponseEntity.ok(service.createCoupon(dto));
+    public ResponseEntity<CouponResponseDTO> createCopon(@RequestBody CouponCreateDTO dto,
+            @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer", "").trim();
+        return ResponseEntity.ok(service.createCoupon(dto, token));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Coupon>> getCouponById(@PathVariable Long id) {
-        return ResponseEntity.ok(fetchImpl.getById(id));
+    public ResponseEntity<Optional<Coupon>> getCouponById(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer", "").trim();
+        return ResponseEntity.ok(fetchImpl.getById(id, token));
     }
 
     @GetMapping
-    public ResponseEntity<List<Coupon>> getAllCoupons() {
+    public ResponseEntity<List<CouponResponseDTO>> getAllCoupons() {
         return ResponseEntity.ok(fetchImpl.getAll());
     }
 

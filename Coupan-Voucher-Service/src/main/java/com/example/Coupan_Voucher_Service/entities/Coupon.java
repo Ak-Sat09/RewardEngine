@@ -19,6 +19,12 @@ public class Coupon {
 
     private String description;
 
+    private Double price;
+
+    private Long ownerId;
+
+    private Long buyerId;
+
     // private LocalDate expiryDate;
 
 }

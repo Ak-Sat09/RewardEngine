@@ -1,6 +1,8 @@
 package com.example.Coupan_Voucher_Service.services.creationService;
 
 import org.springframework.stereotype.Service;
+
+import com.example.Coupan_Voucher_Service.config.JwtUtils;
 import com.example.Coupan_Voucher_Service.dtos.CouponCreateDTO;
 import com.example.Coupan_Voucher_Service.dtos.CouponResponseDTO;
 import com.example.Coupan_Voucher_Service.entities.Coupon;
@@ -12,14 +14,19 @@ import lombok.RequiredArgsConstructor;
 public class CouponCreateImpl implements CouponCreate {
 
     private final CouponRepository repository;
+    private final JwtUtils jwtUtils;
 
     @Override
-    public CouponResponseDTO createCoupon(CouponCreateDTO dto) {
+    public CouponResponseDTO createCoupon(CouponCreateDTO dto, String token) {
+
+        Long userId = Long.parseLong(jwtUtils.getUserIdFromToken(token));
 
         // 1. Build entity
         Coupon coupon = Coupon.builder()
                 .code(dto.code())
                 .description(dto.description())
+                .price(dto.price())
+                .ownerId(userId)
                 .build();
 
         // 2. Save to DB
@@ -29,6 +36,8 @@ public class CouponCreateImpl implements CouponCreate {
         return new CouponResponseDTO(
                 saved.getId(),
                 "AKS****",
-                saved.getDescription());
+                saved.getDescription(),
+                saved.getPrice(),
+                saved.getOwnerId());
     }
 }

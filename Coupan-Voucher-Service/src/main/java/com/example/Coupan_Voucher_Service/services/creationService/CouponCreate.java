@@ -5,5 +5,5 @@ import com.example.Coupan_Voucher_Service.dtos.CouponResponseDTO;
 
 public interface CouponCreate {
 
-    CouponResponseDTO createCoupon(CouponCreateDTO dto);
+    CouponResponseDTO createCoupon(CouponCreateDTO dto, String token);
 }
