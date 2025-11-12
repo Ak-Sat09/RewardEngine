@@ -25,6 +25,6 @@ public class Coupon {
 
     private Long buyerId;
 
-    // private LocalDate expiryDate;
+    private boolean reserved;
 
 }
